@@ -7,6 +7,7 @@ from math import pi
 from scipy import stats, spatial, optimize
 
 import re
+import glob
 
 import textwrap
 
@@ -25,6 +26,8 @@ from mplsoccer import Radar, grid as mplgrid
 from pypdf import PdfReader, PdfWriter
 from pypdf.annotations import Link
 from pypdf.generic import ArrayObject, NumberObject, NameObject
+
+from PIL import Image
 
 from itertools import combinations
 
@@ -5651,3 +5654,312 @@ def export_composition_link_scatter(team_wide, links, fig_dir=player_fig_dir, po
     plt.close(fig)
     print(f"saved C5 link panels to {os.path.abspath(path)}")
     return [path]
+
+def close_pair_groups(D, team_wide, cluster_col, close_share=0.10):
+    ids = [t for t in D.index if t in team_wide.index and pd.notna(team_wide.loc[t, cluster_col])]
+    M = D.loc[ids, ids].to_numpy(float); M = (M + M.T) / 2
+    iu = np.triu_indices(len(ids), 1)
+    d = M[iu]; close = d <= np.quantile(d, close_share)
+    g = team_wide.loc[ids, cluster_col].astype(int).to_numpy()
+    return pd.Series([tuple(sorted(p)) for p in zip(g[iu[0]][close], g[iu[1]][close])]).value_counts()
+
+def league_direction_all(team_wide, share_cols, cluster_col="kmeans_3_cluster", league_col="league"):
+    """For every cluster: its share minus the rest of the teams' (pts), pooled, and how many leagues point the same way."""
+    out = {}
+    for g in sorted(team_wide[cluster_col].dropna().unique()):
+        is_g = team_wide[cluster_col] == g
+        diff = team_wide.loc[is_g, share_cols].mean() - team_wide.loc[~is_g, share_cols].mean()
+        lg = (team_wide.loc[is_g].groupby(league_col)[share_cols].mean()
+              - team_wide.loc[~is_g].groupby(league_col)[share_cols].mean())
+        out[(f"Cluster {int(g)}", "gap_pts")] = (diff * 100).round(1)
+        out[(f"Cluster {int(g)}", "leagues")] = ((np.sign(lg) == np.sign(diff)).sum().astype(str)
+                                                 + "/" + lg.notna().sum().astype(str))
+    return pd.DataFrame(out)
+
+# Team report functions
+
+report_order = [
+    # all_k/<Team>_<League>/
+    r"^team_card", r"^typical_xi", r"^formations", r"^type_shares$", r"^pitch_profile$",
+    # k<n>/<Team>_<League>/ : profile vs its cluster first, then the radars in the group-profile order
+    r"^team_profile", r"^pitch_profile_vs_group", r"^type_shares_vs_group",
+    r"^build_up", r"^channels", r"^chance_creation", r"^pressing_transitions",
+    r"^pull", r"^distance",
+]
+ 
+# Readable names for the figures you export (anything else gets a name made from its file name).
+report_names = {
+    "team_card": "Team card", "typical_xi": "Typical XI", "formations": "Formations",
+    "type_shares": "Player-type shares", "pitch_profile": "Pitch profile",
+    "team_profile": "Team profile vs its cluster", "pitch_profile_vs_group": "Pitch profile vs its cluster",
+    "type_shares_vs_group": "Player-type shares vs its cluster",
+    "build_up": "Radar: build up", "channels": "Radar: channels", "chance_creation": "Radar: chance creation",
+    "pressing_transitions": "Radar: pressing and transitions", "pull": "Pull chart", "distances": "Distances",
+}
+kind_order = ["raw", "adj", None]                       # columns of a grouped page
+kind_label = {"raw": "Raw", "adj": "Adjusted", None: ""}
+scope_order = ["all", "league"]                         # rows of a grouped page
+scope_label = {"all": "vs all teams", "league": "vs own league teams"}
+ 
+ 
+def _split_stem(stem):
+    """'build_up_adj_league' -> ('build_up', 'adj', 'league'); 'pull_own_league' -> ('pull', None, 'league')."""
+    s, kind, scope = stem, None, "all"
+    if s.endswith("_league"):
+        s = s[:-len("_league")]
+        s = s[:-len("_own")] if s.endswith("_own") else s
+        scope = "league"
+    for suf in ("_adj", "_raw"):
+        if s.endswith(suf):
+            s, kind = s[:-len(suf)], suf[1:]
+    return s, kind, scope
+ 
+ 
+def _base_label(base):
+    if base in report_names:
+        return report_names[base]
+    words = [w.upper() if w.lower() in ("xi", "gk", "cb", "cf", "cm", "fwb") else w for w in base.split("_") if w]
+    text = " ".join(words)
+    return text[:1].upper() + text[1:]
+ 
+ 
+def _figure_label(stem):
+    """One-figure label: 'build_up_adj_league' -> 'Radar: build up (adjusted, own league)'."""
+    base, kind, scope = _split_stem(stem)
+    extra = [x for x in ({"adj": "adjusted", "raw": "raw"}.get(kind), "own league" if scope == "league" else None) if x]
+    return _base_label(base) + (f" ({', '.join(extra)})" if extra else "")
+ 
+ 
+def _report_pages(folder, fig_dir, position, ks, order, exclude, group_versions=True):
+    """[(section, label, nrows, ncols, {(row, col): (caption, path)})] for one team: all_k first, then each k."""
+    sections = [("All k", os.path.join(fig_dir, position, "all_k", folder))]
+    sections += [(f"k = {k}", os.path.join(fig_dir, position, f"k{k}", folder)) for k in ks]
+ 
+    def rank(name):
+        hit = [i for i, pat in enumerate(order) if re.search(pat, name)]
+        return (hit[0] if hit else len(order), name)
+ 
+    pages = []
+    for sec, d in sections:
+        stems = sorted(os.path.basename(f)[:-4] for f in glob.glob(os.path.join(d, "*.png")))
+        stems = [s for s in stems if not any(re.search(x, s) for x in exclude)]
+        if not group_versions:
+            for s in sorted(stems, key=rank):
+                pages.append((sec, _figure_label(s), 1, 1, {(0, 0): ("", os.path.join(d, s + ".png"))}))
+            continue
+        groups = {}
+        for s in stems:
+            base, kind, scope = _split_stem(s)
+            groups.setdefault(base, []).append((kind, scope, os.path.join(d, s + ".png")))
+        for base in sorted(groups, key=rank):
+            members = groups[base]
+            kinds = [k for k in kind_order if any(m[0] == k for m in members)]
+            scopes = [sc for sc in scope_order if any(m[1] == sc for m in members)]
+            if len(members) == 1:
+                kind, scope, path = members[0]
+                pages.append((sec, _figure_label(os.path.basename(path)[:-4]), 1, 1, {(0, 0): ("", path)}))
+                continue
+            if len(kinds) > 1:                                   # raw / adjusted x all / own league: 2 x 2 grid
+                nrows, ncols = len(scopes), len(kinds)
+                cell = lambda kind, scope: (scopes.index(scope), kinds.index(kind))
+            else:                                                # all / own league: side by side
+                nrows, ncols = 1, len(scopes)
+                cell = lambda kind, scope: (0, scopes.index(scope))
+            panels = {}
+            for kind, scope, path in members:
+                cap = " · ".join(x for x in (kind_label[kind], scope_label[scope]) if x)
+                panels[cell(kind, scope)] = (cap, path)
+            pages.append((sec, _base_label(base), nrows, ncols, panels))
+    return pages
+ 
+ 
+def _load_png(path, max_px):
+    """RGB array of the PNG (transparency flattened onto the page colour), shrunk so its longer side <= max_px."""
+    im = Image.open(path)
+    if im.mode in ("RGBA", "LA", "P"):
+        im = im.convert("RGBA")
+        bg = Image.new("RGBA", im.size, surface)
+        im = Image.alpha_composite(bg, im)
+    im = im.convert("RGB")
+    if max_px and max(im.size) > max_px:
+        s = max_px / max(im.size)
+        im = im.resize((max(1, round(im.size[0] * s)), max(1, round(im.size[1] * s))), Image.LANCZOS)
+    return np.asarray(im)
+ 
+ 
+def _report_page(header, nrows, ncols, panels, max_px):
+    """One page: header on top, the figures in an nrows x ncols grid, each at its own aspect ratio with its caption.
+    panels: {(row, col): (caption, path)}. Cells without a figure stay empty."""
+    arrs = {rc: (cap, _load_png(p, max_px)) for rc, (cap, p) in panels.items()}
+    col_w = 11.0 if ncols == 1 else 8.4
+    max_h = 13.5 if nrows == 1 and ncols == 1 else 11.0
+    has_cap = any(cap for cap, _ in arrs.values())
+    TOP, PAD, GAP, CAP = 0.6, 0.25, 0.3, (0.32 if has_cap else 0.0)
+    row_h = []
+    for r in range(nrows):
+        hs = [col_w * a.shape[0] / a.shape[1] for (rr, _), (_, a) in arrs.items() if rr == r]
+        row_h.append(min(max(hs) if hs else 1.0, max_h))
+    W = 2 * PAD + ncols * col_w + (ncols - 1) * GAP
+    H = TOP + sum(row_h) + nrows * CAP + (nrows - 1) * GAP + PAD
+    fig = plt.figure(figsize=(W, H))
+    fig.set_facecolor(surface)
+    fig.text(PAD / W, 1 - 0.32 / H, header, fontsize=12, fontweight="bold", color=ink, va="center")
+    y_top = H - TOP
+    for r in range(nrows):
+        for c in range(ncols):
+            if (r, c) not in arrs:
+                continue
+            cap, a = arrs[(r, c)]
+            x0 = PAD + c * (col_w + GAP)
+            if cap:
+                fig.text((x0 + 0.05) / W, (y_top - CAP / 2) / H, cap, fontsize=10, fontweight="bold", color=ink2,
+                         va="center")
+            w = col_w
+            h = w * a.shape[0] / a.shape[1]
+            if h > row_h[r]:                                      # taller than the row allows: shrink, keep aspect
+                h = row_h[r]
+                w = h * a.shape[1] / a.shape[0]
+            ax = fig.add_axes([(x0 + (col_w - w) / 2) / W, (y_top - CAP - h) / H, w / W, h / H])
+            ax.imshow(a, interpolation="none")
+            ax.axis("off")
+        y_top -= row_h[r] + CAP + GAP
+    return fig
+ 
+ 
+def _report_contents(team_name, league, items):
+    """Contents page: one column per section (All k, k = 2, ...), each page a link target.
+    items: [(section, label, page)]. Returns (fig, [rect in points per item, in item order])."""
+    sections = list(dict.fromkeys(s for s, _, _ in items))
+    by_sec = {sec: [it for it in items if it[0] == sec] for sec in sections}
+    COL, ROW = 3.7, 0.28
+    n_rows = max(len(v) for v in by_sec.values())
+    W = max(0.6 + len(sections) * COL, 8.0)
+    H = 1.75 + (n_rows + 0.5) * ROW + 0.3
+    fig = plt.figure(figsize=(W, H))
+    fig.set_facecolor(surface)
+    fig.text(0.3 / W, 1 - 0.45 / H, team_name, fontsize=18, fontweight="bold", color=ink, va="center")
+    fig.text(0.3 / W, 1 - 0.85 / H, f"{league} · every figure exported for this team. Click a page to open it; "
+             "every page links back here.", fontsize=9.5, color=ink2, va="center")
+    rect_of = {}
+    for j, sec in enumerate(sections):
+        x = 0.3 + j * COL
+        y = H - 1.45
+        fig.text(x / W, y / H, sec, fontsize=11, fontweight="bold", color=ink, va="center")
+        for i, (_, label, page) in enumerate(by_sec[sec]):
+            yy = y - (i + 1) * ROW
+            fig.text(x / W, yy / H, label, fontsize=8.8, color=slots[0], va="center")
+            fig.text((x + COL - 0.35) / W, yy / H, f"p. {page}", fontsize=8, color=muted, va="center", ha="right")
+            rect_of[page] = (x * 72, (yy - ROW / 2) * 72, (x + COL - 0.3) * 72, (yy + ROW / 2) * 72)
+    return fig, [rect_of[page] for _, _, page in items]
+ 
+ 
+def _back_link_report(fig, text="← Back to contents"):
+    W, H = fig.get_size_inches()
+    t = fig.text(1 - 0.25 / W, 1 - 0.32 / H, text, fontsize=10, color=slots[0], ha="right", va="center")
+    fig.canvas.draw()
+    bb = t.get_window_extent(fig.canvas.get_renderer())
+    k = 72 / fig.dpi
+    return (bb.x0 * k - 4, bb.y0 * k - 4, bb.x1 * k + 4, bb.y1 * k + 4)
+ 
+ 
+def team_report_pdf(team_id, team_id_to_team, team_id_to_league, fig_dir=player_fig_dir, position="teams",
+                    ks=(2, 3, 4), order=None, exclude=(), max_px=1800, filename="team_report.pdf", fit_page=False,
+                    group_versions=True):
+    """Every PNG exported for one team behind a clickable contents page -> <...>/all_k/<Team>_<League>/team_report.pdf.
+    ks: which k folders to include (e.g. ks=(2, 3) to leave out the diagnostic k = 4).
+    order: list of regexes on figure names giving the page order within each section; default REPORT_ORDER.
+    exclude: regexes of file names (without .png) to leave out (e.g. exclude=(r"_raw",) drops the raw radars).
+    max_px: longest side of each image in the PDF (smaller = smaller file; 1800 stays sharp on screen).
+    group_versions: True puts the versions of one figure on one page (side by side, or 2 x 2 for the radars).
+    Returns the path, or None if the team has no exported figures."""
+    order = REPORT_ORDER if order is None else order
+    name = str(team_id_to_team.get(team_id, team_id))
+    league = str(team_id_to_league.get(team_id, ""))
+    folder = get_folder_name(team_id, team_id, team_id_to_team, team_id_to_league)
+    pages = _report_pages(folder, fig_dir, position, ks, order, exclude, group_versions)
+    if not pages:
+        warnings.warn(f"no exported figures found for {name} (looked in all_k/{folder} and k*/{folder})", stacklevel=2)
+        return None
+    out_dir = os.path.join(fig_dir, position, "all_k", folder)
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, filename)
+    items = [(sec, label, i + 2) for i, (sec, label, _, _, _) in enumerate(pages)]
+    back_rects = []
+    with PdfPages(path) as pdf:
+        fig, contents_rects = _report_contents(name, league, items)
+        pdf.savefig(fig)                                          # no bbox_inches="tight": link positions must not move
+        plt.close(fig)
+        for sec, label, nrows, ncols, panels in pages:
+            header = f"{name} ({league}) · {sec} · {label}"
+            try:
+                fig = _report_page(header, nrows, ncols, panels, max_px)
+            except Exception as e:                                # unreadable file: placeholder keeps page numbers
+                plt.close("all")
+                fig = plt.figure(figsize=(11, 3))
+                fig.set_facecolor(surface)
+                fig.text(0.03, 0.6, header, fontsize=12, fontweight="bold", color=ink)
+                fig.text(0.03, 0.35, f"Could not draw this page: {type(e).__name__}: {e}", fontsize=9, color=muted)
+            back_rects.append(_back_link_report(fig))
+            pdf.savefig(fig)
+            plt.close(fig)
+ 
+    try:                                                          # links and bookmarks
+        from pypdf import PdfReader, PdfWriter
+        from pypdf.annotations import Link
+        from pypdf.generic import ArrayObject, NumberObject, NameObject, NullObject, FloatObject, Fit
+    except ImportError:
+        warnings.warn("pypdf is not installed (pip install pypdf): the PDF has no clickable links.", stacklevel=2)
+        return path
+    reader = PdfReader(path)
+    writer = PdfWriter()
+    for p in reader.pages:
+        writer.add_page(p)
+    no_border = ArrayObject([NumberObject(0), NumberObject(0), NumberObject(0)])
+    top_of = lambda target: float(writer.pages[target].mediabox.top)
+ 
+    def goto(on_page, rect, target):                              # link to the page object itself (works in all viewers)
+        a = writer.add_annotation(on_page, Link(rect=rect, target_page_index=target, border=no_border))
+        ref = writer.pages[target].indirect_reference
+        a[NameObject("/Dest")] = (ArrayObject([ref, NameObject("/Fit")]) if fit_page else
+                                  ArrayObject([ref, NameObject("/XYZ"), NullObject(), FloatObject(top_of(target)),
+                                               NullObject()]))
+ 
+    for i, rect in enumerate(contents_rects):
+        goto(0, rect, i + 1)
+    for i, rect in enumerate(back_rects):
+        goto(i + 1, rect, 0)
+    fit_of = lambda target: Fit.fit() if fit_page else Fit.xyz(left=None, top=top_of(target), zoom=None)
+    writer.add_outline_item("Contents", 0, fit=fit_of(0))
+    parents = {}
+    for sec, label, page in items:
+        if sec not in parents:
+            parents[sec] = writer.add_outline_item(sec, page - 1, is_open=True, fit=fit_of(page - 1))
+        writer.add_outline_item(label, page - 1, parent=parents[sec], fit=fit_of(page - 1))
+    tmp = path + ".tmp"
+    with open(tmp, "wb") as fh:
+        writer.write(fh)
+    os.replace(tmp, path)
+    return path
+ 
+ 
+def export_team_reports(team_id_to_team, team_id_to_league, team_ids=None, **kwargs):
+    """One report per team (ordered by league, then team id) -> <...>/all_k/<Team>_<League>/team_report.pdf.
+    kwargs go to team_report_pdf (ks=..., exclude=..., max_px=..., fit_page=..., group_versions=...).
+    Returns the saved paths."""
+    ids = list(team_ids) if team_ids is not None else list(team_id_to_team)
+    ids = sorted(ids, key=lambda t: (str(team_id_to_league.get(t, "")), t))
+    paths, failed, empty = [], {}, []
+    for t in ids:
+        try:
+            p = team_report_pdf(t, team_id_to_team, team_id_to_league, **kwargs)
+        except Exception as e:
+            failed[t] = f"{type(e).__name__}: {e}"
+            plt.close("all")
+            continue
+        (paths.append(p) if p else empty.append(t))
+    print(f"saved {len(paths)} team reports")
+    for t in empty:
+        print(f"  no figures  {team_id_to_team.get(t, t)}")
+    for t, err in failed.items():
+        print(f"  failed      {team_id_to_team.get(t, t)}: {err}")
+    return paths

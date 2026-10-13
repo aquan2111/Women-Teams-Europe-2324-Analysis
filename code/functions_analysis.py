@@ -5872,7 +5872,7 @@ def team_report_pdf(team_id, team_id_to_team, team_id_to_league, fig_dir=player_
     max_px: longest side of each image in the PDF (smaller = smaller file; 1800 stays sharp on screen).
     group_versions: True puts the versions of one figure on one page (side by side, or 2 x 2 for the radars).
     Returns the path, or None if the team has no exported figures."""
-    order = REPORT_ORDER if order is None else order
+    order = report_order if order is None else order
     name = str(team_id_to_team.get(team_id, team_id))
     league = str(team_id_to_league.get(team_id, ""))
     folder = get_folder_name(team_id, team_id, team_id_to_team, team_id_to_league)

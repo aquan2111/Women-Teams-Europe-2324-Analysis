@@ -7,7 +7,9 @@ from math import pi
 from scipy import stats, spatial, optimize
 
 import re
+import gc
 import glob
+import io
 
 import textwrap
 
@@ -5856,8 +5858,7 @@ def _report_contents(team_name, league, items):
 def _back_link_report(fig, text="← Back to contents"):
     W, H = fig.get_size_inches()
     t = fig.text(1 - 0.25 / W, 1 - 0.32 / H, text, fontsize=10, color=slots[0], ha="right", va="center")
-    fig.canvas.draw()
-    bb = t.get_window_extent(fig.canvas.get_renderer())
+    bb = t.get_window_extent(fig.canvas.get_renderer())          # measures the text only (no full draw of the page)
     k = 72 / fig.dpi
     return (bb.x0 * k - 4, bb.y0 * k - 4, bb.x1 * k + 4, bb.y1 * k + 4)
  
@@ -5884,36 +5885,39 @@ def team_report_pdf(team_id, team_id_to_team, team_id_to_league, fig_dir=player_
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, filename)
     items = [(sec, label, i + 2) for i, (sec, label, _, _, _) in enumerate(pages)]
-    back_rects = []
-    with PdfPages(path) as pdf:
-        fig, contents_rects = _report_contents(name, league, items)
-        pdf.savefig(fig)                                          # no bbox_inches="tight": link positions must not move
-        plt.close(fig)
-        for sec, label, nrows, ncols, panels in pages:
-            header = f"{name} ({league}) · {sec} · {label}"
-            try:
-                fig = _report_page(header, nrows, ncols, panels, max_px)
-            except Exception as e:                                # unreadable file: placeholder keeps page numbers
-                plt.close("all")
-                fig = plt.figure(figsize=(11, 3))
-                fig.set_facecolor(surface)
-                fig.text(0.03, 0.6, header, fontsize=12, fontweight="bold", color=ink)
-                fig.text(0.03, 0.35, f"Could not draw this page: {type(e).__name__}: {e}", fontsize=9, color=muted)
-            back_rects.append(_back_link_report(fig))
-            pdf.savefig(fig)
-            plt.close(fig)
- 
-    try:                                                          # links and bookmarks
+    try:
         from pypdf import PdfReader, PdfWriter
         from pypdf.annotations import Link
         from pypdf.generic import ArrayObject, NumberObject, NameObject, NullObject, FloatObject, Fit
-    except ImportError:
-        warnings.warn("pypdf is not installed (pip install pypdf): the PDF has no clickable links.", stacklevel=2)
-        return path
-    reader = PdfReader(path)
+    except ImportError as e:
+        raise ImportError("team_report_pdf needs pypdf (pip install pypdf)") from e
     writer = PdfWriter()
-    for p in reader.pages:
-        writer.add_page(p)
+ 
+    def add_page(fig):
+        """Save one page on its own and add it to the report, so only one page's images are ever held in memory."""
+        buf = io.BytesIO()
+        fig.savefig(buf, format="pdf")                            # no bbox_inches="tight": link positions must not move
+        plt.close(fig)
+        buf.seek(0)
+        writer.add_page(PdfReader(buf).pages[0])
+        gc.collect()                                              # figures hold their images until collected
+ 
+    fig, contents_rects = _report_contents(name, league, items)
+    add_page(fig)
+    back_rects = []
+    for sec, label, nrows, ncols, panels in pages:
+        header = f"{name} ({league}) · {sec} · {label}"
+        try:
+            fig = _report_page(header, nrows, ncols, panels, max_px)
+        except Exception as e:                                    # unreadable file: placeholder keeps page numbers
+            plt.close("all")
+            fig = plt.figure(figsize=(11, 3))
+            fig.set_facecolor(surface)
+            fig.text(0.03, 0.6, header, fontsize=12, fontweight="bold", color=ink)
+            fig.text(0.03, 0.35, f"Could not draw this page: {type(e).__name__}: {e}", fontsize=9, color=muted)
+        back_rects.append(_back_link_report(fig))
+        add_page(fig)
+ 
     no_border = ArrayObject([NumberObject(0), NumberObject(0), NumberObject(0)])
     top_of = lambda target: float(writer.pages[target].mediabox.top)
  
@@ -5957,6 +5961,7 @@ def export_team_reports(team_id_to_team, team_id_to_league, team_ids=None, **kwa
             plt.close("all")
             continue
         (paths.append(p) if p else empty.append(t))
+        gc.collect()                                              # free each team's images before the next one
     print(f"saved {len(paths)} team reports")
     for t in empty:
         print(f"  no figures  {team_id_to_team.get(t, t)}")

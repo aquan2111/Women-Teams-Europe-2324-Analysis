@@ -66,16 +66,18 @@ A team "moves" when it leaves the cluster that most of its previous cluster went
 
 ## Appendix
 
+<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>
+
 ### A1. Team paths across k
 
 <p align="center">
-  <img src="../plots/teams/all_k/team_paths.png" alt="Team paths from k = 2 to k = 4" width="90%">
+  <img src="../plots/teams/all_k/team_paths.png" alt="Team paths from k = 2 to k = 4" width="65%">
 </p>
 <p align="center"><em>Figure A1. Each team's cluster from k = 2 to k = 4. A team moves when it leaves the cluster that most of its previous cluster went to; 16 teams stay patient at every k.</em></p>
 
-<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>
-
 <div style="page-break-after: always;"></div>
+
+<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>
 
 ### A2. k = 2
 
@@ -85,9 +87,9 @@ A team "moves" when it leaves the cluster that most of its previous cluster went
 </p>
 <p align="center"><em>Figure A2. Left: each team's lead for its own cluster, with the teams close to it in style (open markers) scored on the same cluster. Right: similarity gap against style distance for all 1,225 pairs. At k = 2, 95 of the 123 close pairs share a cluster (77%, against 51% by chance), and the typical similarity gap is 0.04 for the closest tenth of pairs against 0.20 for the furthest.</em></p>
 
-<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>
-
 <div style="page-break-after: always;"></div>
+
+<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>
 
 ### A3. k = 3
 
@@ -97,9 +99,9 @@ A team "moves" when it leaves the cluster that most of its previous cluster went
 </p>
 <p align="center"><em>Figure A3. Same as Figure A2 for k = 3. 90 of the 123 close pairs share a cluster (73%, against 32% by chance), and the typical similarity gap is 0.08 for the closest tenth of pairs against 0.26 for the furthest.</em></p>
 
-<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>
-
 <div style="page-break-after: always;"></div>
+
+<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>
 
 ### A4. k = 4
 
@@ -108,5 +110,3 @@ A team "moves" when it leaves the cluster that most of its previous cluster went
   <img src="../plots/teams/k4/similarity_gap_vs_distance.png" alt="Similarity gap vs style distance, k = 4" width="49%">
 </p>
 <p align="center"><em>Figure A4. Same as Figure A2 for k = 4. 69 of the 123 close pairs share a cluster (56%, against 24% by chance), and the typical similarity gap is 0.10 for the closest tenth of pairs against 0.31 for the furthest.</em></p>
-
-<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>

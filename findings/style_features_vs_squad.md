@@ -34,3 +34,15 @@ Almost none of channel traits or chance creation traits link to any player type.
 - Own action links are partly built in.
 - Long distribution keepers draw from both the top and bottom of the table, so keeper links need care when interpreting.
 - Winger links rest on only 40 teams, while center forward links rest on only 48.
+
+## Appendix
+
+<p align="center">
+  <img src="../plots/teams/all_k/composition_links_map.png" alt="Map of links between player-type minute shares and style traits" width="90%">
+</p>
+<p align="center"><em>Figure 1. Links between player-type minute shares and style traits. A link counts only if it passes the check for the large number of comparisons and points the same way in at least 3 of 4 leagues (55 of 490 type-trait pairs).</em></p>
+
+<p align="center">
+  <img src="../plots/teams/all_k/composition_links_top.png" alt="The 15 strongest type-trait links, one panel per pair" width="90%">
+</p>
+<p align="center"><em>Figure 2. The 15 strongest type-trait links (at most 2 per style trait), one panel per pair: each dot is a team, placed by its share of minutes for the player type and its value for the style trait.</em></p>

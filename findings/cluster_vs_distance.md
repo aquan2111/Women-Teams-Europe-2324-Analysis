@@ -63,3 +63,50 @@ A team "moves" when it leaves the cluster that most of its previous cluster went
 - 5 teams move at k = 4. Barcelona went from wide crossers to central combiners, while the other way was seen in Wolfsburg. From the patient cluster, Manchester City and Inter went to crossers, while Hoffenheim to central combiners. The high-pressing cluster was drawn from both front-foot clusters.
 - Barcelona, Inter, and Hoffenheim sit between clusters at every k. Inter was only side that switched sides twice (front foot to patient then back to front foot).
 - Subsequently, while the patient cluster holds across every k, front foot teams shuffle as k grows.
+
+## Appendix
+
+### A1. Team paths across k
+
+<p align="center">
+  <img src="../plots/teams/all_k/team_paths.png" alt="Team paths from k = 2 to k = 4" width="90%">
+</p>
+<p align="center"><em>Figure A1. Each team's cluster from k = 2 to k = 4. A team moves when it leaves the cluster that most of its previous cluster went to; 16 teams stay patient at every k.</em></p>
+
+<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>
+
+<div style="page-break-after: always;"></div>
+
+### A2. k = 2
+
+<p align="center">
+  <img src="../plots/teams/k2/close_teams.png" alt="Close teams strip, k = 2" width="49%">
+  <img src="../plots/teams/k2/similarity_gap_vs_distance.png" alt="Similarity gap vs style distance, k = 2" width="49%">
+</p>
+<p align="center"><em>Figure A2. Left: each team's lead for its own cluster, with the teams close to it in style (open markers) scored on the same cluster. Right: similarity gap against style distance for all 1,225 pairs. At k = 2, 95 of the 123 close pairs share a cluster (77%, against 51% by chance), and the typical similarity gap is 0.04 for the closest tenth of pairs against 0.20 for the furthest.</em></p>
+
+<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>
+
+<div style="page-break-after: always;"></div>
+
+### A3. k = 3
+
+<p align="center">
+  <img src="../plots/teams/k3/close_teams.png" alt="Close teams strip, k = 3" width="49%">
+  <img src="../plots/teams/k3/similarity_gap_vs_distance.png" alt="Similarity gap vs style distance, k = 3" width="49%">
+</p>
+<p align="center"><em>Figure A3. Same as Figure A2 for k = 3. 90 of the 123 close pairs share a cluster (73%, against 32% by chance), and the typical similarity gap is 0.08 for the closest tenth of pairs against 0.26 for the furthest.</em></p>
+
+<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>
+
+<div style="page-break-after: always;"></div>
+
+### A4. k = 4
+
+<p align="center">
+  <img src="../plots/teams/k4/close_teams.png" alt="Close teams strip, k = 4" width="49%">
+  <img src="../plots/teams/k4/similarity_gap_vs_distance.png" alt="Similarity gap vs style distance, k = 4" width="49%">
+</p>
+<p align="center"><em>Figure A4. Same as Figure A2 for k = 4. 69 of the 123 close pairs share a cluster (56%, against 24% by chance), and the typical similarity gap is 0.10 for the closest tenth of pairs against 0.31 for the furthest.</em></p>
+
+<p align="right"><a href="#team-clustering-results-vs-team-style-distance">&#8593; Back to main text</a></p>

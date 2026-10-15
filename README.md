@@ -58,7 +58,7 @@ How much of the ball a team has (possession, field tilt) is left out because it 
 3. **Patient teams are one family, while front-foot teams come in flavours.** 26 teraams are patient however finely styles are split. On the other hand, front-foot teams divide into central combiners, who attack through the middle with through balls, and wide crossers, who attack down the flanks and cross. With four groups, a set of high pressers appears.
 4. **Styles are tendencies, not boxes.** Teams that play alike usually share a group, but some teams sit between styles however they are split.
 5. **Style shows in the squad more at the back and in midfield, in every league.** While patient teams give more minutes to short passing keepers, line holding center backs and carrying midfielders, while front-foot teams give more to long passing keepers, stopper center backs and progressive passing midfielders.
-6. **Which flank a team attacks, and how it creates chances, has alsmot nothing to do with player types.**
+6. **Which flank a team attacks, and how it creates chances, has almost nothing to do with player types.**
 
 ## Limitations
 

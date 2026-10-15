@@ -2456,7 +2456,7 @@ def plot_team_cluster_comparison(df, feature_list, cluster_col, n_clusters, grou
         pct_series_dict[label], raw_series_dict[label] = _series_for(members, feature_list, suffix)
 
     where = "" if league is None else f", {league}"
-    league_slug = None if league is None else str(league).replace('/', '-').replace(' ', '_')
+    league_slug = None if league is None else str(league).replace('/', '-').replace(' ', '_').replace("'", '')
     chart_name = f"{group_name}_{suffix_label(suffix)}"
     if league_slug:
         chart_name += f"_{league_slug}"
@@ -4077,7 +4077,7 @@ def export_group_type_shares(team_wide, cluster_col, n_clusters, fig_dir=player_
     os.makedirs(out_dir, exist_ok=True)
     league = kwargs.get("league")
     path = os.path.join(out_dir, filename if league is None
-                        else filename.replace(".png", f"_{str(league).replace('/', '-').replace(' ', '_')}.png"))
+                        else filename.replace(".png", f"_{str(league).replace('/', '-').replace(' ', '_').replace("'", '')}.png"))
     fig.savefig(path, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
     return path
@@ -4098,7 +4098,7 @@ def export_team_type_shares(team_wide, cluster_col, n_clusters, names, positions
     os.makedirs(out_dir, exist_ok=True)
     paths = []
     for p in pos:
-        slug = p.replace('/', '-').replace(' ', '_')
+        slug = p.replace('/', '-').replace(' ', '_').replace("'", '')
         mine = [c for c in pool if c.startswith(p + "__soft_")]
         top = [c for c in mine if "_" not in c.split("__soft_")[-1]]
         modes = [(False, "")]
@@ -4109,7 +4109,7 @@ def export_team_type_shares(team_wide, cluster_col, n_clusters, names, positions
         for sub, ext in modes:
             fig = team_type_shares(team_wide, cluster_col, p, names, type_cols=type_cols, sub=sub, league=league, **kwargs)
             path = os.path.join(out_dir, f"type_shares_teams_{slug}{ext}"
-                                + (f"_{str(league).replace('/', '-').replace(' ', '_')}" if league is not None else "") + ".png")
+                                + (f"_{str(league).replace('/', '-').replace(' ', '_').replace("'", '')}" if league is not None else "") + ".png")
             fig.savefig(path, dpi=dpi, bbox_inches="tight")
             plt.close(fig)
             paths.append(path)

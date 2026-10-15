@@ -1894,7 +1894,7 @@ def compute_soft_cluster_spectrum(X_pca, kmeans_model, stats_df, sigma_quantile=
     out[f'margin_k{n_clusters}'] = sim_sorted[:, 0] - sim_sorted[:, 1]
     out[f'sigma_used_k{n_clusters}'] = sigma
 
-    return stats_df.join(out)  # joins on shared index labels, not row position
+    return stats_df.drop(columns=out.columns, errors="ignore").join(out)  # rerun-safe: old columns replaced
 
 def build_subcluster_adj(df, cluster_col, feature_cols, covariate_col, clusters_to_refit):
     df = df.copy()
@@ -5685,7 +5685,7 @@ report_order = [
     r"^team_card", r"^typical_xi", r"^formations", r"^type_shares$", r"^pitch_profile$",
     # k<n>/<Team>_<League>/ : profile vs its cluster first, then the radars in the group-profile order
     r"^team_profile", r"^pitch_profile_vs_group", r"^type_shares_vs_group",
-    r"^build_up", r"^channels", r"^chance_creation", r"^pressing_transitions",
+    r"^build_up_channels", r"^chance_creation_pressing_transitions",
     r"^pull", r"^distance",
 ]
  
@@ -5695,8 +5695,9 @@ report_names = {
     "type_shares": "Player-type shares", "pitch_profile": "Pitch profile",
     "team_profile": "Team profile vs its cluster", "pitch_profile_vs_group": "Pitch profile vs its cluster",
     "type_shares_vs_group": "Player-type shares vs its cluster",
-    "build_up": "Radar: build up", "channels": "Radar: channels", "chance_creation": "Radar: chance creation",
-    "pressing_transitions": "Radar: pressing and transitions", "pull": "Pull chart", "distances": "Distances",
+    "build_up_channels": "Radar: build up and channels",
+    "chance_creation_pressing_transitions": "Radar: chance creation, pressing and transitions", 
+    "pull": "Pull chart", "distances": "Distances",
 }
 kind_order = ["raw", "adj", None]                       # columns of a grouped page
 kind_label = {"raw": "Raw", "adj": "Adjusted", None: ""}

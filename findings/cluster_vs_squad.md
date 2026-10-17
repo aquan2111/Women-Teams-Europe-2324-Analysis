@@ -4,13 +4,28 @@
 
 ## Contents
 
-- [Do different clusters give different minutes to different player types?](#minutes-by-type)
-- [Do the same trends remain across leagues?](#league-check)
-- [Caveats](#caveats)
-- [Appendix](#appendix)
-  - **k = 2:** [A1. Squad mix](#app-k2-mix) · [A2. Goalkeeper and centre-back](#app-k2-goalkeeper) · [A3. Full/wing-back and midfield](#app-k2-fullwing_back) · [A4. Midfield: hard types and sub-types](#app-k2-midfield) · [A5. Winger and centre-forward](#app-k2-winger)
-  - **k = 3:** [A6. Squad mix](#app-k3-mix) · [A7. Goalkeeper and centre-back](#app-k3-goalkeeper) · [A8. Full/wing-back and midfield](#app-k3-fullwing_back) · [A9. Midfield: hard types and sub-types](#app-k3-midfield) · [A10. Winger and centre-forward](#app-k3-winger)
-  - **k = 4:** [A11. Squad mix](#app-k4-mix) · [A12. Goalkeeper and centre-back](#app-k4-goalkeeper) · [A13. Full/wing-back and midfield](#app-k4-fullwing_back) · [A14. Midfield: hard types and sub-types](#app-k4-midfield) · [A15. Winger and centre-forward](#app-k4-winger)
+- [Team clustering results vs Team squad composition](#team-clustering-results-vs-team-squad-composition)
+  - [Contents](#contents)
+  - [Main question](#main-question)
+  - [Do different clusters give different minutes to different player types?](#do-different-clusters-give-different-minutes-to-different-player-types)
+  - [Do the same trends remain across leagues?](#do-the-same-trends-remain-across-leagues)
+  - [Caveats](#caveats)
+  - [Appendix](#appendix)
+    - [A1. Squad mix by cluster, k = 2](#a1-squad-mix-by-cluster-k--2)
+    - [A2. Player-type split by team, k = 2: goalkeeper and centre-back](#a2-player-type-split-by-team-k--2-goalkeeper-and-centre-back)
+    - [A3. Player-type split by team, k = 2: full/wing-back and midfield](#a3-player-type-split-by-team-k--2-fullwing-back-and-midfield)
+    - [A4. Midfield split by team, k = 2: hard types and sub-types](#a4-midfield-split-by-team-k--2-hard-types-and-sub-types)
+    - [A5. Player-type split by team, k = 2: winger and centre-forward](#a5-player-type-split-by-team-k--2-winger-and-centre-forward)
+    - [A6. Squad mix by cluster, k = 3](#a6-squad-mix-by-cluster-k--3)
+    - [A7. Player-type split by team, k = 3: goalkeeper and centre-back](#a7-player-type-split-by-team-k--3-goalkeeper-and-centre-back)
+    - [A8. Player-type split by team, k = 3: full/wing-back and midfield](#a8-player-type-split-by-team-k--3-fullwing-back-and-midfield)
+    - [A9. Midfield split by team, k = 3: hard types and sub-types](#a9-midfield-split-by-team-k--3-hard-types-and-sub-types)
+    - [A10. Player-type split by team, k = 3: winger and centre-forward](#a10-player-type-split-by-team-k--3-winger-and-centre-forward)
+    - [A11. Squad mix by cluster, k = 4](#a11-squad-mix-by-cluster-k--4)
+    - [A12. Player-type split by team, k = 4: goalkeeper and centre-back](#a12-player-type-split-by-team-k--4-goalkeeper-and-centre-back)
+    - [A13. Player-type split by team, k = 4: full/wing-back and midfield](#a13-player-type-split-by-team-k--4-fullwing-back-and-midfield)
+    - [A14. Midfield split by team, k = 4: hard types and sub-types](#a14-midfield-split-by-team-k--4-hard-types-and-sub-types)
+    - [A15. Player-type split by team, k = 4: winger and centre-forward](#a15-player-type-split-by-team-k--4-winger-and-centre-forward)
 
 <div style="page-break-after: always;"></div>
 
@@ -26,41 +41,42 @@ At k = 2,
 
 - Patient teams give more minutes for short passing keepers and line holding center backs.
 - Front-footed teams give more minutes for passing wingbacks, while patient teams give more minutes for deep full backs.
-- While soft shares were quite even, in terms of hard shares, front-footed teams give more minutes to progressive passing midfielders, while patient teams give more minutes to deep pivot midfielders and advanced carrying midfielders.
-- Patient teams give more minutes for wide conservative carrying midfielders, while front-footed teams give more minutes for wide playmakers.
-- Patient teams give more minutes for poachers, while front-footed teams give more minutes to advanced forwards.
+- While soft shares were quite even, in terms of hard shares, front-footed teams give more minutes to progressive passing central midfielders, while patient teams give more minutes to advanced carrying central midfielders.
+- Patient teams give slightly more minutes for wide conservative carrying midfielders, while front-footed teams give slightly more minutes for advanced wingers.
+- Patient teams give slightly more minutes for poachers, while front-footed teams give slightly more minutes to advanced forwards.
 
 At k = 3,
 
-- Similar trends at the back can be seen as k = 2.
-- Central combiners give more minutes to progressive passers but fewer to deep pivot midfielders.
-- Central combiners give more minutes to wide playmakers, while wide crossers give more minutes to advanced wingers.
-- Wide crossers give fewer minutes to poachers, but more to advanced forwards and target forwards.
+- Direct teams show their front-footedness at the back, with more minutes for long passing keepers, stopper centerbacks, passing wingbacks, progressive passing central midfielders, and advanced forwards.
+- Patient teams use short passing keepers, line holding center backs, deep full backs, deep pivot midfielders, advanced carrying central midfielders, wide conservative carrying midfielders.
+- Passing teams do not show much squad signature, with only more minutes for short passing keepers.
 
 At k = 4,
 
-- High pressers show their front-footedness in more minutes to long passing keepers, stopper center backs, and progressive passers.
+- Similar trends are observed in direct and patient teams
+- Central teams have a similar squad to patient teams when it comes to the defence and central midfielders. They give fewer minutes to advanced wingers.
+- Passing teams give more minutes to deep pivot center midfielders and less to advanced carrying center midfielders.
 
 <a id="league-check"></a>
 
 ## Do the same trends remain across leagues?
 
-A difference counts when it is at least 5 percent and points the same way in at least 3 of the 4 leagues.
+A gap holds in a league when it points the same way there.
 
-- At k = 2, the patient/front-foot squad differences hold across leagues: patient teams give more minutes to advanced carriers, line holding center backs, and short passing keepers, while fewer minutes to progressive passers and progressive passing wingbacks.
-- The signature for patient group remains the same throughout different values of k.
-- At k = 3, central combiners give more minutes to progressive passers rather than deep pivots and more minutes to wide playmakers, while wide crossers give fewer minutes to advanced carriers and poachers.
-- At k = 4, high pressing teams have more long passing keepers and stopper center backs but fewer advanced carriers.
-
-Therefore, the squad pattern is mostly consistent among patient and front-footed teams, while differences among front-footed styles were smaller but still consistent across different leagues.
+- At k = 2, every difference above 5 percent holds across all 4 leagues, except for deep pivot midfielders only in 2. Weaker but consistent signatures can be observed in wide conservative carrying midfielders, advanced forwards, and soft shares for progressive passing and advanced carrying central midfielders.
+- For the patient group, the signature stays the same as k go up.
+- At k = 3, the direct cluster's progressive passers, stopper center backs, and advanced forwards types hold in all 4 leagues, while its long passing keepers and fewer advanced carriers hold in 3 leagues. The passing cluster's short passing keepers hold in all 4.
+- At k = 4, similar trends can be observed for the direct cluster, with an additon of more passing wing backs consistent across 3 leagues. The central cluster's keepers and center backs hold in all 4 leagues, while its central midfield and winger differences in 3. The passing cluster's two differences hold in 3 leagues.
 
 <a id="caveats"></a>
 
 ## Caveats
 
-- Team style is made up of players' own actions, so the link between squad and style is automatic.
+- Team style is made up of players' own actions, so the link between squad and style is partly automatic.
+- The results do not show whether clubs pick players to suit a style or coaches fit the style to the players they have.
 - 10 clubs have no clustered wingers, and 2 clubs have no clustered center forwards, so they sit out.
 - Midfield difference is only seen in hard shares rather than soft, as midfielders' similarity scores are spread evenly across three types.
+- At k = 3 and k = 4 the clusters are small, especially with the central cluster only having 1 to 3 teams per league at k = 4.
 
 <div style="page-break-after: always;"></div>
 

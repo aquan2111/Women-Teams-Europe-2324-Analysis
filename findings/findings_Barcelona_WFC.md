@@ -2,23 +2,19 @@
 
 ## Clustering results
 
-For all of k = 2, k = 3, and k = 4, Barcelona's clustering outcome was almost equal for all clusters. In the end, they ended up with front-footed teams in k = 2, wide crossers in k = 3, and central combiners in k = 4.
-
-### Like patient teams
-
-Barcelona was not progressive when it comes to passing, and their build up was less direct and more patient. More of their shots were from open play and less were from direct set piece and transitions. Less box entries were done via passing. Left channel was their main channel of attack.
+At k = 2, Barcelona were clustered with front footed teams, but only just. Then at k = 3 and k = 4, Barcelona were clustered with passing teams at a slightly bigger margin, but still sat between groups.
 
 ### Like front-footed teams
 
-Barcelona was particularly aggresive in average defensive location; in fact, their average defensive location was in the opposition half. They were also active with counterpress actions. On the other hand, they did not progressively carry the ball much.
+Barcelona were particularly aggressive in average defensive location; in fact, their average defensive location was in the opposition half. They were also active with counterpress actions in opposition half. For a team of their strength, their box entries were done more via passes.
 
-### Like wide crossers
+### Like patient teams
 
-They attempted more crosses, with fewer of their final third actions happening down the middle.
+Barcelona were not progressive when it comes to passing. More of their shots were from open play and less were from direct set piece and counter attacks.
 
-### Like central combiners
+### Like passing teams
 
-They had slightly more carries into the final third centrally, and attempted much more through balls.
+When their strength was taken into account, Barcelona were average in terms of directness and long goal kicks, shot more from open play and fewer from direct set piece and transitions, and passed into the final third through the middle more than patient teams did.
 
 ## Pitch profile
 
@@ -26,10 +22,10 @@ Only a fifth of Barcelona's attack went down the middle, while the left flank wa
 
 ## Formations and typical XI
 
-4-3-3 was the most used formation by Barcelona by a significant margin. Most position saw significant rotations throughout the season, apart from Bonmati as right center midfield, Graham Hansen as right winger, Batlle at left back.
+4-3-3 was the most used formation by Barcelona by a significant margin. Most positions saw significant rotations throughout the season, apart from Bonmati as right center midfield, Graham Hansen as right winger, Batlle at left back.
 
 ## Similar teams
 
-Being the most dominant team, Barcelona somehow ended up with a squad similarly built to Bristol City, the least dominant team. However, there are more teams that played like Barcelona than built like Barcelona.
+Being the most dominant team, Barcelona ended up with a squad similarly built to Bristol City, the least dominant team. However, there were more teams that played like Barcelona than built like Barcelona.
 
 The full [Barcelona team report (PDF)](../plots/teams/all_k/Barcelona_WFC_Liga_F/team_report.pdf).

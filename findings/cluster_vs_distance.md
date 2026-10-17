@@ -10,59 +10,107 @@ Taking the closest 10% of team pairs gives 123 pairs.
 
 If teams were put in clusters at random while cluster sizes are preserved,
 
-- 51% of pairs would land in the same cluster for k = 2
+- 50% of pairs would land in the same cluster for k = 2
 - 32% of pairs would land in the same cluster for k = 3
-- 24% of pairs would land in the same cluster for k = 4
+- 25% of pairs would land in the same cluster for k = 4
 
 Among the 123 close pairs,
 
-- 95 pairs (77%) landed in the same cluster for k = 2
-- 90 pairs (73%) landed in the same cluster for k = 3
-- 69 pairs (56%) landed in the same cluster for k = 4
+- 97 pairs (79%) landed in the same cluster for k = 2
+- 91 pairs (74%) landed in the same cluster for k = 3
+- 79 pairs (64%) landed in the same cluster for k = 4
 
-The margins of difference in terms of similarity for close teams are also quite close, in particular,
+Close teams also sit at similar distances from their cluster border, in particular,
 
-- For k = 2, a typical gap between two close teams is 0.08, while between any two teams is 0.21
-- For k = 3, a typical gap between two close teams is 0.10, while between any two teams is 0.26
-- For k = 4, a typical gap between two close teams is 0.12, while between any two teams is 0.27
+- For k = 2, a typical gap between two close teams is 0.10, while between any two teams is 0.23
+- For k = 3, a typical gap between two close teams is 0.08, while between any two teams is 0.24
+- For k = 4, a typical gap between two close teams is 0.10, while between any two teams is 0.27
 
-Therefore, teams play alike mostly land in the same cluster, well above chance. The agreement is stronger at k = 2 and k = 3.
+Therefore, teams play alike mostly land in the same cluster, well above chance.
 
 ## How tight are clusters
 
-- For patient teams (k = 2 cluster 0, k = 3 cluster 2, k = 4 cluster 3), most teams have many neighbours, which can be even 6 or 7, or even up to 14. Most neighbours end up landing in the same cluster. On the other hand, most front foot teams (k = 2 cluster 1, k = 3 clusters 0 and 1, k = 4 cluster 0, 1, and 2) have fewer neighbours (4 or less). However there are a few teams with more neighbours than patient teams, which include Barcelona WFC (19) and SC Freiburg (15). Eventually these teams sit near the center of the style map.
-- There are 6 teams without neighbours, 5 of them were front footed (SD Eibar, AS Roma W, RB Leipzig W, Nurnberg W, and SGS Essen 19/68). The other team that landed in patient cluster was Madrid CFF. Also, some of these teams were firm members within their clusters (SD Eibar at k = 2, Nurnberg W at k = 3 and k = 4, AS Roma for all k).
-- Therefore, while patient teams can be quite similar, which can be seen in how they remained consistent throughout all values of k, front footed teams are more varied in how they play.
+A cluster is tight when many pairs of its teams are close. Since 10% of all pairs are close, a cluster of above 10% is tighter than a random group of teams.
+
+| k | Cluster | Teams | Close pairs inside the cluster | Share of its pairs |
+| --- | --- | --- | --- | --- |
+| 2 | 0 (front-foot) | 28 | 54 of 378 | 14% |
+| 2 | 1 (patient) | 22 | 43 of 231 | 19% |
+| 3 | 0 (direct) | 15 | 11 of 105 | 10% |
+| 3 | 1 (passing) | 19 | 44 of 171 | 26% |
+| 3 | 2 (patient) | 16 | 36 of 120 | 30% |
+| 4 | 0 (central) | 8 | 4 of 28 | 14% |
+| 4 | 1 (passing) | 11 | 32 of 55 | 58% |
+| 4 | 2 (direct) | 17 | 13 of 136 | 10% |
+| 4 | 3 (patient) | 14 | 30 of 91 | 33% |
+
+- Patient teams are tight at every k, and the tightness grows at further k.
+- At k = 4 the passing cluster is the tightest, while direct teams are the loosest. Eventually most of the direct teams have very few neighbours, or even none.
+- The central cluster at k = 4 is small and loose.
+- There are 5 teams without neighbours, 3 of them were front footed (AS Roma W, RB Leipzig W, and SGS Essen 19/68). The other two teams that land in patient cluster were Madrid CFF and Nurnberg W. Also, most of these teams are quite firm members within their clusters, apart from RB Leipzig W at k = 3 and k = 4.
+- The three teams with the most neighbours are Barcelona WFC (20), SC Freiburg (15), and Bayern Munchen W (12). All of them are front-footed at k = 2, passing teams at k = 3, and open play build up front-footed teams at k = 4.
+
+Subsequently, at k = 4, patient and passing teams play quite alike, while direct teams are more varied in how they played, and the central cluster is the least clearly grouped.
 
 ## Where do clusters meet?
 
-Among 123 pairs of close distance,
+A close pair that sits across two clusters shows where their borders blur. Since 10% of all pairs are close, two clusters with a share near 10% overlap as much as random teams would.
 
-- At k = 2, 28 pairs cross the patient/front-foot border (5% of the pairs across it). Close pairs are more common among patient cluster (54 out of 190 - 28%), while rarer among front-foot cluster (41 out of 435 - 9%).
-- At k = 3, most cross cluster closeness happens between patient and wide crosser teams (23 pairs - 7% of the pairs between them). Central combiners rarely touch patient cluster (3 pairs - 1%) and only sometimes wide crossers (7 pairs - 3%).
-- At k = 4, the high pressers are furthest from the patient cluster (4 close pairs - 3%), while central combiners touch patient teams most (17 close pairs - 10%), which mostly come from Barcelona and Hoffenheim joining while being close to patient teams.
-- Teams that sit at the border at every k include Barcelona, Bayern, Hoffenheim, Freiburg, and Inter, while Duisburg sits at the border at k = 2.
-- Consequently, at k = 3 the style runs from patient to wide crossers to central combiners, while at k = 4 the high pressers sit furthest from patient play, and a small set of teams sit where clusters meet.
+| k | Clusters | Close pairs between them | Share of pairs between them |
+| --- | --- | --- | --- |
+| 2 | 0 (front-foot) and 1 (patient) | 26 of 616 | 4% |
+| 3 | 1 (passing) and 2 (patient) | 24 of 304 | 8% |
+| 3 | 0 (direct) and 1 (passing) | 8 of 285 | 3% |
+| 3 | 0 (direct) and 2 (patient) | 0 of 240 | 0% |
+| 4 | 1 (passing) and 3 (patient) | 16 of 154 | 10% |
+| 4 | 0 (central) and 1 (passing) | 9 of 88 | 10% |
+| 4 | 0 (central) and 3 (patient) | 9 of 112 | 8% |
+| 4 | 1 (passing) and 2 (direct) | 9 of 187 | 5% |
+| 4 | 2 (direct) and 3 (patient) | 1 of 238 | 0.4% |
+| 4 | 0 (central) and 2 (direct) | 0 of 136 | 0% |
+
+- At k = 2, 26 pairs cross the patient/front-foot border (4% of the pairs across it), against 14% inside the front foot cluster and 19% inside the patient cluster.
+- At k = 3, the passing cluster sits in the middle, meeting the patient cluster more than the direct cluster (24 against 8). Direct teams and patient teams never form a close pair.
+- At k = 4, the passing cluster touches every other cluster, in which it overlaps the patient and central clusters as much as random teams would (10%), and then direct cluster much less (5%). The central cluster also meets the patient cluster at 9 pairs. The direct cluster is the furthest out, as it only really touches the passing cluster at 9 pairs but only 1 with the patient cluster and none with the central cluster.
+- Barcelona WFC, Hoffenheim W, Atletico Madrid W, SC Freiburg, and Bayern Munchen W are the teams with the most close teams in other clusters every k. At k = 3, all FC Internazionale Milano W's neighbours are in other clusters.
+- Consequently, at k = 3 the style runs from direct to passing to patient, with passing teams at the middle. While at k = 4, the passing cluster is the hub, the direct cluster sits furthest out, and the central cluster links the passing and patient teams.
 
 ## Similarity gap vs Distance
 
 The similarity gap is the share of similarity that would have to move to turn one team's scores into the other's, with 0 being same leaning and 1 being opposite.
 
-- At all k, the further apart two teams play, the further apart are their similarity scores. The typical gap for the closest tenth of pairs is 0.04 at k = 2, 0.08 at k = 3, and 0.10 at k = 4, against 0.20, 0.26, and 0.31 for the furthest tenth.
-- At k = 2, the gap was flat across the closest third of pairs, before rising more steadily after.
+| k | Closest tenth of pairs (middle half) | Furthest tenth of pairs | Any two teams | Close pairs with a bigger gap than any two teams |
+| --- | --- | --- | --- | --- |
+| 2 | 0.05 (0.02 to 0.08) | 0.26 | 0.12 | 12 of 123 |
+| 3 | 0.07 (0.04 to 0.11) | 0.30 | 0.16 | 5 of 123 |
+| 4 | 0.10 (0.06 to 0.14) | 0.36 | 0.21 | 2 of 123 |
+
+- At all k, the further apart two teams play, the further apart are their similarity scores. The typical gap for the closest tenth of pairs is less than half that of any two teams, with the furthest tenth around double.
+- At k = 2, the gap stays under 0.09 up to a distance of about 0.9, before climbing faster to 0.26 for further pairs.
 - On the other hand, at k = 3 and k = 4, the rise is more steady as more clusters tell what kind of front foot a team resembles.
-- The link runs one way, as teams that play alike tend to have similar scores, but similar scores do not mean similar playstyle, as shown in k = 2 how many front-foot pairs played differently but ended up with near identical scores.
+- Very few close pairs have a larger gap than any two teams. At k = 2, most of the 12 look like pairs from different clusters, which are teams near the border.
+- The link runs one way, as teams that play alike tend to have similar scores, but similar scores do not mean similar playstyle. Many teams from the same cluster are far apart in style yet have a small similarity gap. At k = 4 many of these pairs are from cluster 2 (direct), which fits the direct cluster being the loosest.
 - Hence, a large gap in similarity scores mean two teams play differently, while a small gap only indicates that the two teams lean the same way. At higher k, gaps are large because there are more clusters to differ accross, so comparisons are only valid within each k rather than across different values of k.
 
 ## Do teams stay in their cluster as k goes up?
 
-A team "moves" when it leaves the cluster that most of its previous cluster went to.
+Going from k = 2 to k = 4, each team follows a path through three sets of clusters. At k = 4 every cluster fits inside one of the two k = 2 clusters, so a team can only change side at k = 3.
 
-- The patient cluster was stable throughout, with 16 teams staying at every k.
-- At k = 3, Tottenham went from patient to central combiners, Duisburg went from patient to wide crossers, Inter went from front-foot to patient.
-- 5 teams move at k = 4. Barcelona went from wide crossers to central combiners, while the other way was seen in Wolfsburg. From the patient cluster, Manchester City and Inter went to crossers, while Hoffenheim to central combiners. The high-pressing cluster was drawn from both front-foot clusters.
-- Barcelona, Inter, and Hoffenheim sit between clusters at every k. Inter was only side that switched sides twice (front foot to patient then back to front foot).
-- Subsequently, while the patient cluster holds across every k, front foot teams shuffle as k grows.
+| Path (k = 2, k = 3, k = 4) | Teams |
+| --- | --- |
+| Front-foot, direct, direct | 15 |
+| Front-foot, passing, passing | 11 |
+| Front-foot, passing, direct | 2 (Manchester United W, RB Leipzig W) |
+| Patient, patient, patient | 11 |
+| Patient, patient, central | 5 (Tottenham Hotspur Women, Hoffenheim W, Madrid CFF, Real Betis Balompié, Pomigliano) |
+| Patient, passing, patient | 3 (FC Internazionale Milano W, Athletic Club Bilbao, Levante UD Femenino) |
+| Patient, passing, central | 3 (Fiorentina W, Real Sociedad de Fútbol, Nürnberg W) |
+
+- The direct cluster was the most stable throughout, with all 15 teams at k = 3 being still direct at k = 4, and only 2 teams joining from the passing cluster.
+- The patient cluster mostly holds. 16 of 22 teams stay patient at k = 3, and 11 of those are still patient at k = 4. The other 5 teams form the core of the central cluster.
+- The passing cluster at k = 3 is the only place where teams change side with 13 front foot teams and 6 patient teams, which fits it being the middle zone between the other two clusters. At k = 4 all 6 teams returned to the patient side, with 3 joining the patient cluster and 3 joining the central cluster.
+- Teams on cluster borders are not the ones that switch. Barcelona FCW, SC Freiburg, and Bayern Munchen W stay passing at k = 3 and k = 4, while Atletico Madrid W stay patient at every k. FC Internazionale Milano W, on the other hand, had all five of its k = 3 neighbours in other clusters, and at k = 4 it goes back to the patient cluster, where four of its neighbours are.
+- Subsequently, while the direct cluster is the firmest across every k, the patient cluster holds apart from a few teams.
 
 ## Appendix
 

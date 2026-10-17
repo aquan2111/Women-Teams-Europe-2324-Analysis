@@ -2,15 +2,15 @@
 
 ## Clustering results
 
-Hoffenheim was closely clustered with patient teams at k = 2 and k = 3. Then at k = 4, they were switched to central combiners by a margin of less than 1 percent.
+Hoffenheim were closely clustered with patient teams at k = 2 and k = 3. Then at k = 4, they were switched to central cluster. The margins for k = 3 and k = 4 were quite close.
 
 ### Like patient teams
 
-Hoffenheim was not one the most active teams when it comes to progressive passing, and they were not direct in build up. They had a lower share of final third entries via passes, and slightly lower than average when it comes to crosses. They were not active in engaging in counterpress actions.
+Hoffenheim were not one of the most active teams when it comes to progressive passing, and they were patient for their strength but not direct in build up. Their goal kicks were mostly short, and more of their box entries were via carries. They were slightly less active in engaging in counterpress actions. They had significantly fewer shots from counter attacks.
 
-### Like central combiners
+### Like central teams
 
-A significant proportions of their carries into the final third ended up centrally, and they also attempted more through balls. Few of their completed box entries via passes were crosses.
+A significant proportion of their carries into the final third ended up centrally. They were particularly indirect in build up, tended to go short in goal kicks, and had more box entries via carries.
 
 ## Pitch profile
 
@@ -24,7 +24,7 @@ For their main formation 4-2-3-1, goalkeeper, center backs, and left winger were
 
 ## Similar teams
 
-Hoffenheim was built similarly to Manchester City and Duisburg, while played similartly to Bayern. These are the three teams that were similar to Hoffenheim on either build or style and overall.
+Hoffenheim were built similarly to Manchester City and Duisburg, while played similarly to Bayern. These were the three teams that were in Hoffenheim's top five teams overall.
 
 ## Appendix
 

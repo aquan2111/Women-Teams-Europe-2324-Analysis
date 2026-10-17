@@ -2,19 +2,19 @@
 
 ## Clustering results
 
-Inter was clustered with front-footed teams at k = 2, then switched to patient teams at k = 3, then wide crossers at k = 4. Eventually the split between all clusters were roughly equal for all values of k.
+Inter were clustered with patient teams at k = 2, then switched to passing teams at k = 3, then back to patient teams at k = 4. The splits for Inter were particularly close at k = 2 and k = 3, while the margin at k = 4 was slightly safer but still close.
 
 ### Like patient teams
 
-Inter was not the most active team when it comes to progressive passing but more active on into the final thid carrying. They did not attempt many through balls. They were not as active in counterpressing, and did not defend highly.
+Inter were not the most active team when it comes to progressive passing. Most of their goal kicks were short. They did not attempt many crosses through balls. They were not as active in counterpressing, and did not defend highly for a team of their strength.
 
 ### Like front-footed teams
 
-Fewer of their shots came from open play, while they had a higher share of box entries via passes. A higher proportion of their shots was after direct set piece situations.
+They were more direct and less patient in building up after strength adjustments. Fewer of their shots came from open play, while they had a higher share of box entries via passes. A higher proportion of their shots was after direct set piece and counter attack situations. Among completed passes into the box, a higher proportion was taken by crosses.
 
-### Like wide crossers
+### Like passing teams
 
-Less of their attacks went down the left, and less of their final third entries went down the middle. Among completed passes into the box, a high proportion of these passes was on crosses.
+At k = 3, Inter matched passing teams on patience, box entries via passes, and carries into the box.
 
 ## Pitch profile
 
@@ -28,7 +28,7 @@ For their main formation 4-2-3-1, stable positions include Cetinja at goalkeeper
 
 ## Similar teams
 
-Inter had quite many close teams both in terms of build and style, although there was not much overlap between these two. Only Real Madrid was similar on build and Como was similar on style that ended up in top 5 similarity overal.
+Inter had quite many close teams in terms of build not as many for style, although there was not much overlap between these two. Only Real Madrid were similar on build and Como and Koln were similar on style that ended up in top 5 similarity overall.
 
 ## Appendix
 

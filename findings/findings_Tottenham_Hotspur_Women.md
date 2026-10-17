@@ -2,17 +2,15 @@
 
 ## Clustering results
 
-For k = 2, Spurs were safely clustered as a patient team. However, at k = 3 and k = 4, they switched to central combiners, but only just.
+For k = 2 and k = 3, Spurs were safely clustered as a patient team. However, at k = 4, they were safely switched to the central cluster. Eventually they were the only FA Women's Super League representative in the central cluster.
 
 ### Like patient teams
 
-Spurs stand out for less progression by passing but more by carrying than most patient teams. They were less direct and more patient on their attacks. More of their shots came from open play but less from direct set piece, while less of their box entries were via passes, especially with crosses. They defended lower and counterpress less on opposition half.
+Spurs stood out for less progression by passing but more by carrying than most patient teams. They were less direct and more patient on their attacks. Their goal kicks were mostly short. More of their shots came from open play but less from direct set piece, while fewer of their box entries were via passes, especially with crosses. They defended lower and counterpress less on opposition half.
 
-In short, build up and defending were what made Spurs looked like a patient team.
+### Like central teams
 
-### Like central combiners
-
-Spurs had much higher shares of final third entries and touches centrally while lower on the right. They attempted much more through balls than average.
+Spurs had much higher shares of final third entries and touches centrally while lower on the right.
 
 ## Pitch profile
 
@@ -26,7 +24,7 @@ For their 4-2-3-1 setup, regular options include Spencer at goalkeeper, Bartrip 
 
 ## Similar teams
 
-Only Koln was close on squad, while Pomigliano was close on style. No teams were genuinely close to Spurs overall.
+Only Koln were close on squad, while Pomigliano were close on style. No teams were genuinely close to Spurs overall.
 
 ## Appendix
 

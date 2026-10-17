@@ -2,22 +2,22 @@
 
 # Women-Teams-Europe-2324-Analysis
 
-How do women's teams in top European leagues play, which teams play alike, and do teams play a certain way pick a certain type of player?
+How do women's teams in top European leagues play, which teams play alike, and do teams that play a certain way pick a certain type of player?
 
 This project groups 50 teams from four European leagues by their style of play, after allowing for their strength, and looks at the players each type relies on.
 
 ## Key Questions
 
-1. **What styles of player are there?** Once you allow for how strong a team is, what styles do the 50 teams fall into, what sets them apart, and does every league have the same styles? -> [Style groups](findings/clustering.md)
+1. **What styles of plays are there?** Once you allow for how strong a team is, what styles do the 50 teams fall into, what sets them apart, and does every league have the same styles? -> [Style groups](findings/clustering.md)
 2. **Do teams that play alike end up in the same group?** Which groups are tight-knit and which are loose, where do styles overlap, and which teams change group when styles are split more finely? -> [Style groups vs How alike teams play](findings/cluster_vs_distance.md)
 3. **Do different styles pick different players?** Does each style give minutes to different types of players, and is it true in every league? -> [Style groups vs Squad](findings/cluster_vs_squad.md)
-4. **Which types of player go with which habits?** For example, do teams that play line holding center backs also defend deeper and pass forward deeper, and does that fit what those players do? -> [Player types vs Style habits](findings/style_features_vs_squad.md)
+4. **Which types of player go with which habits?** For example, do teams that play line holding center backs also defend deeper and player fewer forward passes, and does that fit what those players do? -> [Player types vs Style habits](findings/style_features_vs_squad.md)
 5. **What does each style look like on a real team?** A closer look at clear examples of each style, and teams that sit between styles.
 
-   - [Aston Villa Breakdown](findings/findings_AS_Roma_W.md)
+   - [Aston Villa Breakdown](findings/findings_Aston_Villa_W.md)
    - [Chelsea Breakdown](findings/findings_Chelsea_FCW.md)
    - [AS Roma Breakdown](findings/findings_AS_Roma_W.md)
-   - [Wolfsburg Breakdown](findings/findings_VfL_Wolfsburg_WFC.md)
+   - [Granada Breakdown](findings/findings_Granada_W.md)
    - [Barcelona Breakdown](findings/findings_Barcelona_WFC.md)
    - [Internazionale Breakdown](findings/findings_FC_Internazionale_Milano_W.md)
    - [Hoffenheim Breakdown](findings/findings_Hoffenheim_W.md)
@@ -34,8 +34,8 @@ Data: [StatsBomb Open Data](https://github.com/statsbomb/open-data).
 
 **Describing a style.** Each team is described by how it plays in four phases:
 
-- **Build-up:** How often teams pass and carry the ball forward, how direct and patient teams take when taking shots.
-- **Channels:** Where do teams enter and touch in the final third by different areas, left, right, or center.
+- **Build-up:** How often teams pass and carry the ball forward, how direct and patient teams take when taking shots, and how often teams go long from goal kicks.
+- **Channels:** Whether teams enter and touch in the final third wide or centrally.
 - **Chance creation:** Crosses, cut-backs, through balls, and how many of teams' shots come from different situations.
 - **Pressing and transitions:** How high teams defend, how much teams counterpress in the opponent's half, and how many of teams' shots come from transitions.
 
@@ -43,24 +43,36 @@ How much of the ball a team has (possession, field tilt) is left out because it 
 
 **Allowing for team strength.** A dominant team spends more time in the opponent's half, so it naturally keeps the ball longer and defends higher. Therefore, every measure is compared with what a team of the same strength usually does, so that a style group is not just "top teams" or "bottom teams".
 
-**Grouping teams.** Teams are split by style into 2, 3 and 4 groups. The 2-group split is the main result as it is the most stable, while the 3-group split adds the next level of detail and holds in every league and the 4-group split is a rough guide only. Each team also gets a score for how much it resembles each group, which separates clear members from teams that sit in between.
+**Grouping teams.** Teams are split by style into 2, 3 and 4 groups. The 2-group split is the main result: patient against front-footed teams, while the 3-group separates the front-footed teams into direct and passing, and the 4-group separates a central group from patient teams. Each team also gets a score for how much it resembles each group, which separates clear members from teams that sit in between.
 
 **Comparing teams.** For every pair of teams, how alike do they play? "Close" means the most alike 10% of all pairs.
 
 **Squads.** Every player has a type, and for each team we look at how its minutes at each position are shared across those types. [Player type details](https://github.com/aquan2111/Clustering-Women-Players-Europe-2324).
 
-**What coutns as a real difference.** A difference between styles only counts if it is at least 5 percentage points and shows up the same way in at least 3 leagues. A link between a player type and a style habit also has to beat chance, allowing for the many comparisons made.
+**What counts as a real difference.** A difference between styles only counts if it is at least 5 percentage points and shows up the same way in at least 3 leagues. A link between a player type and a style habit also has to beat chance, allowing for the many comparisons made.
 
 ## Conclusions
 
-1. **The main divide is patient against front-foot, and it covers the whole team.** Patient teams move the ball up by carrying, take longer to get a shot away, defend deeper and counterpress less. The other way around can be seen in front-foot teams.
+1. **The main divide is patient against front-footed, and it covers the whole team.** Patient teams move the ball up by carrying, take fewer long goal kicks, take longer to get a shot away, defend deeper and counterpress less. The other way around can be seen in front-footed teams.
 2. **It is not about quality or league.** Top and bottom sides play both ways, and every league has teams of every style.
-3. **Patient teams are one family, while front-foot teams come in flavours.** 26 teraams are patient however finely styles are split. On the other hand, front-foot teams divide into central combiners, who attack through the middle with through balls, and wide crossers, who attack down the flanks and cross. With four groups, a set of high pressers appears.
+3. **Front-footed teams split cleanly into flavours, while the patient side is less settled.** Only 11 teams out of 22 stayed patient however finely they are split, while most of the other ones became central teams building up and attacking more centrally.
 4. **Styles are tendencies, not boxes.** Teams that play alike usually share a group, but some teams sit between styles however they are split.
-5. **Style shows in the squad more at the back and in midfield, in every league.** While patient teams give more minutes to short passing keepers, line holding center backs and carrying midfielders, while front-foot teams give more to long passing keepers, stopper center backs and progressive passing midfielders.
-6. **Which flank a team attacks, and how it creates chances, has almost nothing to do with player types.**
+5. **Style shows in the squad more at the back and in midfield, in every league.** Patient teams give more minutes to short passing keepers, line holding center backs, deep full backs, and carrying midfielders, while front-footed teams give more to long passing keepers, stopper center backs, passing wing backs, and progressive passing midfielders.
+6. **How teams create chances has almost nothing to do with player types.**
 
 ## Limitations
+
+- The data are only for one particular season, which should not be interpreted as a fixed identity throughout different seasons.
+- Styles only describe how teams play, not how well.
+- The finer splits are less firm, and some groups are small (8 teams in central group with only 1 FA Women's Super League team).
+- Strength is allowed for all 50 teams altogether, in which different leagues' own patterns can leave traces.
+- Barcelona are so far ahead of every other team that their strength-adjusted style can be unreliable, so they are described from their raw numbers.
+- Players and teams are adjusted for strength in slightly different ways, so squads at the two ends of the strength scale can look alike.
+- Players' own actions make up the team numbers, so some squad-style links are built in.
+- 10 teams have no wingers clustered and 2 teams have no center forwards clustered.
+- League-by-league checks rest on only a few teams per style in each league.
+- The midfield difference only shows when each midfielder is assigned a particular type.
+- A team's style is a season average, and some measures may rest on a few events per team.
 
 ## Repository structure
 
